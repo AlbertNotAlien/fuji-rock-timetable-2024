@@ -1,4 +1,5 @@
 import { getArtists, appendMember, toggleMember } from './firestore.js';
+import { Util } from './util.js';
 
 const memberData = [
   { id: 'TING-YAO', name: '美國人' },

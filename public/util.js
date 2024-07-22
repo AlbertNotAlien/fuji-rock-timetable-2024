@@ -1,5 +1,5 @@
 // Utility function
-function Util() {}
+export function Util() {}
 
 /* 
 	class manipulation functions
