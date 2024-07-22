@@ -1,7 +1,21 @@
+import { getArtists, appendMember, toggleMember } from './firestore.js';
+
+const memberData = [
+  { id: 'TING-YAO', name: '美國人' },
+  { id: 'TZU-YUN', name: '潮州人' },
+  { id: 'YUAN-JIE', name: '日本人' },
+  { id: 'SIEW-FUI', name: '馬來人' },
+  { id: 'YU-CHUN', name: '新竹人' },
+  { id: 'CHEN-CHIH', name: '中國人' },
+  { id: 'SHAO-TING', name: '天龍人' },
+  { id: 'CHING-HSUAN', name: '台中人' },
+];
+
 function init() {
   // Schedule Template - by CodyHouse.co
   function ScheduleTemplate(element) {
     this.element = element;
+    this.artists = null;
     this.timelineItems = this.element
       .getElementsByClassName('cd-schedule__timeline')[0]
       .getElementsByTagName('li');
@@ -113,17 +127,28 @@ function init() {
     Util.removeClass(this.element, 'cd-schedule--loading');
   };
 
-  ScheduleTemplate.prototype.initEvents = function () {
+  ScheduleTemplate.prototype.initEvents = async function () {
     var self = this;
+
+    this.artists = await getArtists();
     for (var i = 0; i < this.singleEvents.length; i++) {
       // open modal when user selects an event
+      const target = this.singleEvents[i].getElementsByTagName('a')[0];
+      const artistId = target.getAttribute('data-content');
+
+      const artistData = this.artists.find((artist) => artist.id === artistId);
+      if (!!artistData) {
+        artistData.members.forEach((memberId) => {
+          const member = memberData.find((member) => member.id === memberId);
+          if (!!member) {
+            appendMember(target, member.id, member.name);
+          }
+        });
+      }
+
       this.singleEvents[i].addEventListener('click', function (event) {
         event.preventDefault();
-        //モーダル版封印
-        // if(!self.animating) self.openModal(this.getElementsByTagName('a')[0]);
-        target = this.getElementsByTagName('a')[0];
-        //this.loadEventContent(target.getAttribute('data-content'));
-        openArtist(target.getAttribute('data-content'), target);
+        openArtist(artistId, event.target);
       });
     }
     //close modal window
@@ -515,23 +540,11 @@ function init() {
       }
       resizing = false;
     }
-
-    function openArtist(id, target) {
-      // url = '/artist/detail/' + id;
-      // var subWidth = 500;
-      // var subHeight = 800;
-      // var subWin = window.open(
-      //   url,
-      //   'artist',
-      //   'menubar=0,scrollbars=1,toolbar=0,resizable=1,status=1,width=' +
-      //     subWidth +
-      //     ',height=' +
-      //     subHeight
-      // );
-      // subWin.focus();
-      console.log('id', id);
-    }
   }
+}
+
+function openArtist(artistId, target) {
+  toggleMember(artistId, target);
 }
 
 init();

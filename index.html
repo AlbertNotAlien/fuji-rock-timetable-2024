@@ -12,15 +12,20 @@
       href="https://www.fujirockfestival.com/favicon.ico"
     />
     <link rel="stylesheet" href="./style.css" />
-    <link
-      rel="shortcut icon"
-      href="https://sns.fujirockfestival.com/favicon.ico"
-    />
     <title>FUJIROCK FESTIVAL23</title>
   </head>
   <body>
+    <select id="current-member" name="member">
+      <option value="TING-YAO">美國人</option>
+      <option value="TZU-YUN">潮州人</option>
+      <option value="YUAN-JIE">日本人</option>
+      <option value="SIEW-FUI">馬來人</option>
+      <option value="YU-CHUN">新竹人</option>
+      <option value="CHEN-CHIH">中國人</option>
+      <option value="SHAO-TING">天龍人</option>
+      <option value="CHING-HSUAN">台中人</option>
+    </select>
     <ul id="btn_date">
-      <!--<li><a href="26">26</a></li>-->
       <li class="hilight_date">
         <a href="https://www.fujirockfestival.com/artist/timetable/26">26</a>
       </li>
@@ -84,7 +89,6 @@
           <li><span>29:00</span></li>
         </ul>
       </div>
-      <!-- .cd-schedule__timeline -->
 
       <div class="cd-schedule__events">
         <ul>
@@ -1685,10 +1689,9 @@
 
       <div class="cd-schedule__cover-layer"></div>
     </div>
-    <!-- .cd-schedule -->
-
     <script src="./public/util.js"></script>
-    <!-- util functions included in the CodyHouse framework -->
-    <script src="./public/main.js"></script>
+    <script src="./public/main.js" type="module"></script>
+    <script src="./public/firebase.js" type="module"></script>
+    <script src="./public/firestore.js" type="module"></script>
   </body>
 </html>
