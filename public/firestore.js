@@ -30,13 +30,15 @@ export function appendMember(target, memberId = '', memberName = '') {
   let p = document.createElement('p');
   p.append(memberName);
   p.dataset.id = memberId;
-  p.style = 'color: black; font-size: 0.8rem; margin: 0.2rem 0;';
+  p.style =
+    'pointer-events: none; color: black; font-size: 0.8rem; margin: 0.1rem 0;';
   target.append(p);
 }
 
 export async function addMember(artistId, target) {
   try {
     const userId = document.getElementById('current-member').value;
+    if (artists.length === 0 || !userId) return;
     const existedArtist = artists.find((artist) => artist.id === artistId);
     const newData = existedArtist
       ? { ...existedArtist, members: [...existedArtist.members, userId] }
@@ -49,7 +51,6 @@ export async function addMember(artistId, target) {
       ? artists.map((artist) => (artist.id === artistId ? newData : artist))
       : [...artists, newData];
     artists = newArtists;
-
     const docRef = doc(db, 'artists', artistId);
     await setDoc(docRef, newData);
   } catch (error) {
@@ -60,6 +61,7 @@ export async function addMember(artistId, target) {
 export async function removeMember(artistId, target) {
   try {
     const userId = document.getElementById('current-member').value;
+    if (artists.length === 0 || !userId) return;
     const existedArtist = artists.find((artist) => artist.id === artistId);
     const newData = {
       ...existedArtist,
@@ -67,9 +69,12 @@ export async function removeMember(artistId, target) {
     };
 
     const targetChild = target.querySelector(`[data-id="${userId}"]`);
+    if (!targetChild) return;
     target.removeChild(targetChild);
 
-    const newArtists = artists.filter((artist) => artist.id !== artistId);
+    const newArtists = artists.map((artist) =>
+      artist.id === artistId ? newData : artist
+    );
     artists = newArtists;
 
     const docRef = doc(db, 'artists', artistId);
@@ -81,12 +86,11 @@ export async function removeMember(artistId, target) {
 
 export function toggleMember(artistId, target) {
   const userId = document.getElementById('current-member').value;
-  if (userId.length === 0) return;
+  if (artists.length === 0 || userId.length === 0) return;
 
   const selectedArtist = artists.find((artist) => artist.id === artistId);
   const memberExisted =
     selectedArtist && selectedArtist.members.includes(userId);
-
   if (memberExisted) {
     removeMember(artistId, target);
   } else {
