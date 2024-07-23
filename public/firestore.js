@@ -80,8 +80,10 @@ export async function removeMember(artistId, target) {
 }
 
 export function toggleMember(artistId, target) {
-  const selectedArtist = artists.find((artist) => artist.id === artistId);
   const userId = document.getElementById('current-member').value;
+  if (userId.length === 0) return;
+
+  const selectedArtist = artists.find((artist) => artist.id === artistId);
   const memberExisted =
     selectedArtist && selectedArtist.members.includes(userId);
 
