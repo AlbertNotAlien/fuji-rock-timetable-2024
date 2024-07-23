@@ -86,17 +86,11 @@ export async function removeMember(artistId, target) {
 
 export function toggleMember(artistId, target) {
   const userId = document.getElementById('current-member').value;
-  console.log('🚀 ~ file: firestore.js:89 ~ toggleMember ~ userId:', userId);
-  console.log('🚀 ~ file: firestore.js:91 ~ toggleMember ~ artists:', artists);
   if (artists.length === 0 || userId.length === 0) return;
 
   const selectedArtist = artists.find((artist) => artist.id === artistId);
   const memberExisted =
     selectedArtist && selectedArtist.members.includes(userId);
-  console.log(
-    '🚀 ~ file: firestore.js:94 ~ toggleMember ~ memberExisted:',
-    memberExisted
-  );
   if (memberExisted) {
     removeMember(artistId, target);
   } else {
